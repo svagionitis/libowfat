@@ -5,6 +5,19 @@ cmake_minimum_required(VERSION 2.6)
 set(CMAKE_COLOR_MAKEFILE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
+include(CheckFunctionExists)
+check_function_exists(alloca HAVE_ALLOCA)
+check_function_exists(sendfile HAVE_SENDFILE)
+check_function_exists(poll HAVE_POLL)
+check_function_exists(kevent HAVE_KQUEUE)
+check_function_exists(if_indextoname HAVE_N2I)
+
+include(CheckIncludeFiles)
+check_include_files("sys/devpoll.h" HAVE_DEVPOLL)
+check_include_files("sys/epoll.h" HAVE_EPOLL)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe -W -Wall -O2 -fomit-frame-pointer")
@@ -114,3 +127,63 @@ set(CASE_SRC
 	${PROJECT_SOURCE_DIR}/case/case_starts.c )
 
 add_library(case STATIC ${CASE_SRC})
+
+set(CDB_SRC
+	${PROJECT_SOURCE_DIR}/cdb/cdb.c
+	${PROJECT_SOURCE_DIR}/cdb/cdb_hash.c
+	${PROJECT_SOURCE_DIR}/cdb/cdb_make.c
+	${PROJECT_SOURCE_DIR}/cdb/cdb_traverse.c )
+
+add_library(cdb STATIC ${CDB_SRC})
+
+set(DNS_SRC
+	${PROJECT_SOURCE_DIR}/dns/dns_dfd.c
+	${PROJECT_SOURCE_DIR}/dns/dns_domain.c
+	${PROJECT_SOURCE_DIR}/dns/dns_dtda.c
+	${PROJECT_SOURCE_DIR}/dns/dns_ip.c
+	${PROJECT_SOURCE_DIR}/dns/dns_ip6.c
+	${PROJECT_SOURCE_DIR}/dns/dns_ipq.c
+	${PROJECT_SOURCE_DIR}/dns/dns_ipq6.c
+	${PROJECT_SOURCE_DIR}/dns/dns_mx.c
+	${PROJECT_SOURCE_DIR}/dns/dns_name.c
+	${PROJECT_SOURCE_DIR}/dns/dns_nd.c
+	${PROJECT_SOURCE_DIR}/dns/dns_nd6.c
+	${PROJECT_SOURCE_DIR}/dns/dns_packet.c
+	${PROJECT_SOURCE_DIR}/dns/dns_random.c
+	${PROJECT_SOURCE_DIR}/dns/dns_rcip.c
+	${PROJECT_SOURCE_DIR}/dns/dns_rcrw.c
+	${PROJECT_SOURCE_DIR}/dns/dns_resolve.c
+	${PROJECT_SOURCE_DIR}/dns/dns_sortip.c
+	${PROJECT_SOURCE_DIR}/dns/dns_sortip6.c
+	${PROJECT_SOURCE_DIR}/dns/dns_transmit.c
+	${PROJECT_SOURCE_DIR}/dns/dns_txt.c )
+
+add_library(dns STATIC ${DNS_SRC})
+
+set(FMT_SRC
+	${PROJECT_SOURCE_DIR}/fmt/fmt_8long.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_8longlong.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_asn1derlength.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_asn1dertag.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_double.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_fill.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_httpdate.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_human.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_humank.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_long.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_longlong.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_minus.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_pad.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_plusminus.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_str.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_strm_internal.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_strn.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_tohex.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_ulong.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_ulong0.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_ulonglong.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_utf8.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_xlong.c
+	${PROJECT_SOURCE_DIR}/fmt/fmt_xlonglong.c )
+
+add_library(fmt STATIC ${FMT_SRC})
